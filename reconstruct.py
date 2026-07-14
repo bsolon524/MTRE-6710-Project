@@ -276,12 +276,18 @@ def process_file(path: str, visualise: bool = True) -> None:
     print(f"\n  Layout (left→right): {layout}")
     print("  Displaying (close window to continue) …")
 
-    o3d.visualization.draw_geometries(
-        tiled,
+    vis = o3d.visualization.Visualizer()
+    vis.create_window(
         window_name=f"Reconstruction Comparison — {name}",
         width=1600,
         height=900,
     )
+    for geom in tiled:
+        vis.add_geometry(geom)
+    # Disable backface culling so triangles are visible from both sides
+    vis.get_render_option().mesh_show_back_face = True
+    vis.run()
+    vis.destroy_window()
 
 
 # ---------------------------------------------------------------------------
